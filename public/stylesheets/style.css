@@ -126,8 +126,7 @@ input {
 }
 .comment_input,
 .post_input,
-.edit_input,
-{
+.edit_input{
 	width: 200px;
 	height: 25px;
 	margin-bottom: 5px;
