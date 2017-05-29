@@ -8,14 +8,14 @@
 <% }%>
 <form method="post" action="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">
 <% if (user) { %>
-	姓名：<input type="text" name="name" value="<%= user.name %>" /><br />
-	邮箱：<input type="text" name="email" value="<%= user.email %>" /><br />
-	网址：<input type="text" name="website" value="/u/<%= user.name %>" /><br />
+	姓名：<input type="text" name="name" value="<%= user.name %>" class="comment_input"/><br />
+	邮箱：<input type="text" name="email" value="<%= user.email %>" class="comment_input"/><br />
+	网址：<input type="text" name="website" value="/u/<%= user.name %>" class="comment_input"/><br />
 <% } else { %>
-	姓名：<input type="text" name="name" /><br />
-	邮箱：<input type="text" name="email" /><br />
-	网址：<input type="text" name="website" value="http://" /><br />
+	姓名：<input type="text" name="name" class="comment_input"/><br />
+	邮箱：<input type="text" name="email" class="comment_input"/><br />
+	网址：<input type="text" name="website" value="http://" class="comment_input"/><br />
 <% } %>
 	<textarea name="content" rows="5" cols="80"></textarea><br />
-	<input type="submit" value="留言" />
+	<input type="submit" value="留言" class="comment_input_submit"/>
 </form>

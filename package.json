@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node ./bin/www"
   },
-// 模块依赖，当运行npm install时会检查这里，安装指定的模块，
-// 并把模块存储在node_modules文件夹下
+  // 模块依赖，当运行npm install时会检查这里，安装指定的模块，
+  // 并把模块存储在node_modules文件夹下
   "dependencies": {
     "body-parser": "~1.15.1",
     "connect-flash": "^0.1.1",

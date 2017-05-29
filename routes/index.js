@@ -189,7 +189,9 @@ module.exports = function(app) {
 		res.redirect('/upload');
 	});
 
-
+//添加了一条路由规则 app.get('/u/:name')，用来处理访问用户页的请求，然后从数据库
+//取得该用户的数据并渲染 user.ejs 模版，生成页面并显示给用户。
+ 
 	app.get('/u/:name', function(req, res){
 		var page = parseInt(req.query.p, 10) || 1;
 		//检查用户是否存在
