@@ -165,3 +165,11 @@ input {
 	border: none;
 	margin-top: 10px;
 }
+
+.search {
+	border: 1;
+	width: 130px;
+	height:25px;
+	font-size: 1em;
+	margin: 0.5em 0;
+}
