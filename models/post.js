@@ -3,6 +3,7 @@ var mongodb = require("./db"),
 
 function Post(name, title, tags, post) {
 	this.name = name;
+	this.head = head;
 	this.title = title;
 	this.tags = tags;
 	this.post = post;
@@ -27,6 +28,7 @@ Post.prototype.save = function(callback) {
 	//要存入数据库的文档
 	var post = {
 		name: this.name,
+		head: this.head,
 		time: time,
 		title: this.title,
 		post: this.post,
