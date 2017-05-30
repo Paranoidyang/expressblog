@@ -152,14 +152,14 @@ input {
 	margin-bottom: 5px;
 }
 .login {
-	width: 338px;/*因为前面的input设置了padding为10px,即左右各10，所以是20px,还有这里去掉了两个左右两边框各1px,要加回去给它才会一样宽*/
+	width: 338px;
 	color: #fff;
 	background-color: #ff0000;
 	border: none;
 	margin-top: 10px;
 }
 .reg {
-	width: 355px;/*因为前面的input设置了padding为10px,即左右各10，所以是20px,还有这里去掉了两个左右两边框各1px,要加回去给它才会一样宽*/
+	width: 355px;
 	color: #fff;
 	background-color: #ff0000;
 	border: none;

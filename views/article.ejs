@@ -1,5 +1,6 @@
 <%- include header %>
 <p>
+<!--通过检测 session 中的用户名是否存在，若存在且和当前文章页面的作者名相同，则显示编辑和删除按钮，否则不显示。-->
 	<% if (user && (user.name == post.name)) { %>
 		<span><a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">编辑</a></span>
 		<span><a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">删除</a></span>

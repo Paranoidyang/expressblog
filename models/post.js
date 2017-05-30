@@ -60,10 +60,10 @@ Post.prototype.save = function(callback) {
 };
 
 /**
- * [getTen description]
+ * 我们设定：主页和用户页面每页最多显示两篇文章
  * 
  */
-Post.getTen = function(name, page, callback) {
+Post.getTwo = function(name, page, callback) {
 	mongodb.open(function(err, db) {
 		if (err) {
 			return callback(err);
@@ -81,9 +81,10 @@ Post.getTen = function(name, page, callback) {
 
 			//使用 count 返回特定查询的文档数 total
 			collection.count(query, function(err, total) {
+				//根据 query 对象查询，并跳过前 (page-1)*2个结果，返回之后的 2 个结果
 				collection.find(query, {
-					skip: (page - 1) * 10,
-					limit: 10
+					skip: (page - 1) * 2,
+					limit: 2
 				}).sort({
 					time: -1
 				}).toArray(function(err, docs) {
@@ -132,6 +133,7 @@ Post.getOne = function(name, day, title, callback) {
 				//doc.post = markdown.toHTML(doc.post);
 				if (doc) {
 					doc.post = markdown.toHTML(doc.post);
+					//让留言支持 markdown 语法，
 					if (doc.comments) {
 						doc.comments.forEach(function(comment) {
 							comment.content = markdown.toHTML(comment.content);
@@ -187,12 +189,12 @@ Post.update = function(name, day, title, post, callback) {
 				return callback(err);
 			}
 
-			collection.update({
+			collection.update({//根据下面三个字段查找文档
 				"name": name,
 				"time.day": day,
 				"title": title
 			}, {
-				$set: {
+				$set: {//只能够更新文章内容，标题和标签都不能更新，如果也想更新则在这里添加
 					post: post
 				}
 			}, function(err) {
@@ -240,17 +242,23 @@ Post.remove = function(name, day, title, callback) {
 	});
 };
 
+/**
+ * 返回所有文章存档信息
+ * 
+ */
 Post.getArchive = function(callback) {
+	//打开数据库
 	mongodb.open(function(err, db) {
 		if (err) {
 			return callback(err);
 		}
+		//读取 posts 集合
 		db.collection('posts', function(err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
-
+			//返回只包含 name、time、title 属性的文档组成的存档数组
 			collection.find({}, {
 				"name": 1,
 				"time": 1,

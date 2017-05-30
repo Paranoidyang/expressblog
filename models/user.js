@@ -11,8 +11,7 @@ module.exports = User;
 
 /**
  * 存储用户信息
- * @param  {Function} callback [description]
- * @return {[type]}            [description]
+ * 
  */
 User.prototype.save = function(callback) {
   //要存入数据库的用户文档
@@ -48,9 +47,7 @@ User.prototype.save = function(callback) {
 
 /**
  * 读取用户信息
- * @param  {[type]}   name     [description]
- * @param  {Function} callback [description]
- * @return {[type]}            [description]
+ *
  */
 User.get = function(name, callback) {
   //打开数据库

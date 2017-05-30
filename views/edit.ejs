@@ -1,5 +1,6 @@
 <%- include header %>
 <form method="post">
+<!--这里我们设定了编辑时不能编辑文章的标题和标签-->
 	标题：<br />
 	<input type="text" name="title" value="<%= post.title %>" disabled="disabled" class="edit_input"/><br />
 	标签：<br />

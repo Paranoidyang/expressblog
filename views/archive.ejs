@@ -1,5 +1,7 @@
 <%- include header %>
 <ul class="archive">
+<!--在模版中设置一个 lastYear 变量判断是否和上次已经显示的年份相同，相同则不再显示年份，不同
+则显示-->
 <% var lastYear = 0 %>
 <% posts.forEach(function (post, index) { %>
 	<% if (lastYear != post.time.year) { %>

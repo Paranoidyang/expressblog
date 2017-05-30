@@ -8,8 +8,10 @@ var crypto = require("crypto"), //crypto 是 Node.js 的一个核心模块，我
 module.exports = function(app) {
 	//主页
 	app.get('/', function (req, res) {
+		//判断是否是第一页，并把请求的页数转换成 number 类型
 		var page = parseInt(req.query.p) || 1;
-		Post.getTen(null, page, function(err, posts, total){
+		//查询并返回第 page 页的 2 篇文章
+		Post.getTwo(null, page, function(err, posts, total){
 			if(err) {
 				posts = [];
 			}
@@ -18,7 +20,7 @@ module.exports = function(app) {
 				title: '主页',   //将下面这些变量值传入index模板，渲染成HTML网页
 				page: page,
 				isFirstPage: (page-1) == 0,
-				isLastPage: ((page - 1) * 10 + posts.length) == total,
+				isLastPage: ((page - 1) * 2 + posts.length) == total,
 				user: req.session.user,
 				posts: posts,
 				//flash：页面通知功能。
@@ -200,8 +202,8 @@ module.exports = function(app) {
 				req.flash('error', '用户名不存在');
 				return res.redirect('/');
 			}
-			//查询并返回到用户第page页的10篇文章
-			Post.getTen(user.name, page, function(err, posts, total){
+			//查询并返回到用户第page页的两篇文章
+			Post.getTwo(user.name, page, function(err, posts, total){
 				if(err) {
 					req.flash("error",err);
 					return res.redirect('/');
@@ -211,7 +213,7 @@ module.exports = function(app) {
 					posts: posts,
 					page: page,
 					isFirstPage: (page-1) == 0,
-					isLastPage: ((page-1) * 10 + posts.length)== total,
+					isLastPage: ((page-1) * 2 + posts.length)== total,
 					user: req.session.user,
 					success: req.flash('success').toString(),
 					error: req.flash('error').toString()
@@ -300,7 +302,7 @@ module.exports = function(app) {
 				return res.redirect('back');
 			}
 			req.flash('success', '留言成功');
-			res.redirect('back');
+			res.redirect('back');//留言成功后返回到该文章页
 		});
 	});
 
@@ -321,6 +323,8 @@ module.exports = function(app) {
 			});
 		});
 	});
+
+	//标签
 app.get('/tags', function (req, res) {
   Post.getTags(function (err, posts) {
     if (err) {
@@ -351,6 +355,8 @@ app.get('/tags/:tag', function (req, res) {
     });
   });
 });
+
+//检验是否未登录
 	function checkLogin(req, res, next) {
 		if(!req.session.user) {
 			req.flash('error', '未登录！');
@@ -358,7 +364,8 @@ app.get('/tags/:tag', function (req, res) {
 		}
 		next();
 	}
-
+	
+//检验是否已登录
 	function checkNotLogin(req, res, next) {
 		if(req.session.user) {
 			req.flash('error', "已登录");
