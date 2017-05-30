@@ -31,7 +31,8 @@ Post.prototype.save = function(callback) {
 		title: this.title,
 		post: this.post,
 		tags: this.tags,
-		comments: []
+		comments: [],
+		pv: 0 //给要存储的文档添加了 pv 键并直接赋初值为 0
 	};
 	//打开数据库
 	mongodb.open(function(err, db) {
@@ -51,7 +52,7 @@ Post.prototype.save = function(callback) {
 				mongodb.close();
 				if (err) {
 					return callback(err);
-				
+
 				}
 				callback(null); //返回err为null
 			});
@@ -105,8 +106,9 @@ Post.getTwo = function(name, page, callback) {
 
 /**
  * 根据用户名、发表日期及文章名精确获取一篇文章
- *
+ * 
  */
+//获取一篇文章
 Post.getOne = function(name, day, title, callback) {
 	//打开数据库
 	mongodb.open(function(err, db) {
@@ -125,26 +127,39 @@ Post.getOne = function(name, day, title, callback) {
 				"time.day": day,
 				"title": title
 			}, function(err, doc) {
-				mongodb.close();
 				if (err) {
+					mongodb.close();
 					return callback(err);
 				}
-				//解析 markdown 为 html
-				//doc.post = markdown.toHTML(doc.post);
 				if (doc) {
+					//每访问 1 次，pv 值增加 1
+					collection.update({
+						"name": name,
+						"time.day": day,
+						"title": title
+					}, {
+						$inc: {
+							"pv": 1
+						}
+					}, function(err) {
+						mongodb.close();
+						if (err) {
+							return callback(err);
+						}
+					});
+					//解析 markdown 为 html
 					doc.post = markdown.toHTML(doc.post);
-					//让留言支持 markdown 语法，
-					if (doc.comments) {
-						doc.comments.forEach(function(comment) {
-							comment.content = markdown.toHTML(comment.content);
-						});
-					}
+					//让留言支持 markdown 语法
+					doc.comments.forEach(function(comment) {
+						comment.content = markdown.toHTML(comment.content);
+					});
+					callback(null, doc); //返回查询的一篇文章
 				}
-				callback(null, doc); //返回查询的一篇文章
 			});
 		});
 	});
 };
+
 
 /**
  * 编辑文章
@@ -189,12 +204,12 @@ Post.update = function(name, day, title, post, callback) {
 				return callback(err);
 			}
 
-			collection.update({//根据下面三个字段查找文档
+			collection.update({ //根据下面三个字段查找文档
 				"name": name,
 				"time.day": day,
 				"title": title
 			}, {
-				$set: {//只能够更新文章内容，标题和标签都不能更新，如果也想更新则在这里添加
+				$set: { //只能够更新文章内容，标题和标签都不能更新，如果也想更新则在这里添加
 					post: post
 				}
 			}, function(err) {
